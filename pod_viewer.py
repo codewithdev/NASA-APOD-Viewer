@@ -8,6 +8,7 @@ import webbrowser
 from io import BytesIO
 from pip._vendor.urllib3 import response
 from tkinter import filedialog
+import os
 
 # Create an instance of window object
 win = Tk()
@@ -32,7 +33,7 @@ def get_request():
     global response
     # Set the parameter for request
     url = 'https://api.nasa.gov/planetary/apod'
-    # api_key = os.environ['API_KEY']
+    # api_key = os.environ.get('API_KEY')
     api_key = 'DEMO_KEY'
     date = calander.get_date()
 
@@ -138,3 +139,4 @@ pic_explanation.grid(row=0, column=0, rowspan=1, padx=10, pady=10)
 pic_label.grid(row=0, column=1, padx=10, pady=10)
 
 win.mainloop()
+
