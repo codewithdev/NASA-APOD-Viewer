@@ -4,6 +4,7 @@ from tkinter import ttk
 from tkcalendar import DateEntry
 from PIL import ImageTk, Image
 import requests
+import webbrowser
 from io import BytesIO
 from pip._vendor.urllib3 import response
 
@@ -46,23 +47,28 @@ def set_info():
     global img
     global thumbnail
     global full_img
-
     url = response['url']
-    img_response = requests.get(url, stream=True)
+    # Check if the returned reponse media type conditionally
+    if reponse['media_type'] == 'image':
 
-    # Get the content of the response and use BytesIo to open it as image in the label
-    img_data = img_response.content
-    img = Image.open(BytesIO(img_data))
-    full_img = ImageTk.PhotoImage(img)
+        img_response = requests.get(url, stream=True)
 
-    # Create a thumbnail
-    thumb_data = img_response.content
-    thumb = Image.open(BytesIO(thumb_data))
-    thumb.thumbnail((200, 200))
-    thumb = ImageTk.PhotoImage(thumb)
+        # Get the content of the response and use BytesIo to open it as image in the label
+        img_data = img_response.content
+        img = Image.open(BytesIO(img_data))
+        full_img = ImageTk.PhotoImage(img)
 
-    # Set the image in the Label
-    pic_label.config(image=thumb)
+        # Create a thumbnail
+        thumb_data = img_response.content
+        thumb = Image.open(BytesIO(thumb_data))
+        thumb.thumbnail((200, 200))
+        thumb = ImageTk.PhotoImage(thumb)
+
+        # Set the image in the Label
+        pic_label.config(image=thumb)
+
+    elif reponse['media_type'] == 'video':
+        webbrowser.open(url)
 
 
 def exit_app():
