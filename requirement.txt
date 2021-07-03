@@ -1,0 +1,5 @@
+tkcalander
+tkinter
+requests
+webbrowser
+pillow
