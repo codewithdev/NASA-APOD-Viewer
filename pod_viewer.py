@@ -10,7 +10,7 @@ from pip._vendor.urllib3 import response
 
 # Create an instance of window object
 win = Tk()
-win.geometry("700x450")
+win.geometry("1024x450")
 win.title("NASA POD Viewer")
 win.iconbitmap("planet.ico")
 
@@ -21,6 +21,9 @@ nasa_light_blue = "#7aa5d3"
 win.config(background=nasa_blue)
 
 # Define a function to get the request from NASA APOD API
+img = None
+full_img = None
+thumbnail = None
 
 
 def get_request():
@@ -31,7 +34,7 @@ def get_request():
     api_key = 'DEMO_KEY'
     date = calander.get_date()
 
-    querystring = {'api_key': api_key, 'date': date}
+    querystring = {'api_key': api_key, 'date': date, 'hd': True}
     # Call the request
     response = requests.request("GET", url, params=querystring)
     response = response.json()
@@ -39,7 +42,7 @@ def get_request():
     set_info()
 
 
-# Set the Info
+# Update the labels
 def set_info():
     # Update the Label based on JSON returned objects
     pic_date.config(text=response['date'])
@@ -61,7 +64,7 @@ def set_info():
         # Create a thumbnail
         thumb_data = img_response.content
         thumb = Image.open(BytesIO(thumb_data))
-        thumb.thumbnail((200, 200))
+        thumb.thumbnail((400, 400))
         thumb = ImageTk.PhotoImage(thumb)
 
         # Set the image in the Label
@@ -70,6 +73,17 @@ def set_info():
     elif response['media_type'] == 'video':
         pic_label.config(text=url)
         webbrowser.open(url)
+
+
+def full_size_image():
+    # Create a toplevel window
+    top = Toplevel()
+    top.title("Full APOD Photo")
+    top.iconbitmap('planet.ico')
+
+    # Load full image
+    img_label = Label(top, image=full_img)
+    img_label.pack()
 
 
 def exit_app():
@@ -88,7 +102,7 @@ calander = DateEntry(frame_input, width=10, font=font,
 submit = Button(frame_input, text="Submit", font=font,
                 bg=nasa_light_blue, command=get_request)
 full_btn = Button(frame_input, text="View Photo",
-                  font=font, bg=nasa_light_blue)
+                  font=font, bg=nasa_light_blue, command=full_size_image)
 save_btn = Button(frame_input, text="Save Photo",
                   font=font, bg=nasa_light_blue)
 quit_btn = Button(frame_input, text="Quit", font=font,
