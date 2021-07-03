@@ -21,3 +21,5 @@ For this application:
 - Find your NASA API Key by signing up on `https://api.nasa.gov/` and find the APOD API.
 - You can skip the above process and use the `DEMO_API`.
 - Update your workflow by adding the API key in the GitHub `/Secrets` or use built-in function to add the api in your local environment as a variable and import is using `os.environ.get('your_var_name')`.
+
+**_NOTE_**: You can convert the application to exe using the "auto-py-to-exe" package.
