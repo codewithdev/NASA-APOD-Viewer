@@ -10,7 +10,7 @@ from pip._vendor.urllib3 import response
 
 # Create an instance of window object
 win = Tk()
-win.geometry("700x350")
+win.geometry("700x450")
 win.title("NASA POD Viewer")
 win.iconbitmap("planet.ico")
 
@@ -49,7 +49,7 @@ def set_info():
     global full_img
     url = response['url']
     # Check if the returned reponse media type conditionally
-    if reponse['media_type'] == 'image':
+    if response['media_type'] == 'image':
 
         img_response = requests.get(url, stream=True)
 
@@ -67,7 +67,8 @@ def set_info():
         # Set the image in the Label
         pic_label.config(image=thumb)
 
-    elif reponse['media_type'] == 'video':
+    elif response['media_type'] == 'video':
+        pic_label.config(text=url)
         webbrowser.open(url)
 
 
@@ -101,8 +102,8 @@ quit_btn.grid(row=0, column=4, padx=5, pady=10, ipadx=10)
 # Layout for the output widget
 pic_date = Label(frame_output, text="texting", font=font, bg="white")
 pic_explanation = Label(frame_output, text="texting",
-                        font=font, bg="white", wraplength=300)
-pic_label = Label(frame_output, image="")
+                        font=font, bg="white", wraplength=500)
+pic_label = Label(frame_output, text="testing")
 
 pic_date.grid(row=0, column=1, padx=10)
 pic_explanation.grid(row=0, column=0, rowspan=1, padx=10, pady=10)
