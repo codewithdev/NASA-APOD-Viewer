@@ -7,6 +7,7 @@ import requests
 import webbrowser
 from io import BytesIO
 from pip._vendor.urllib3 import response
+from tkinter import filedialog
 
 # Create an instance of window object
 win = Tk()
@@ -27,6 +28,7 @@ thumbnail = None
 
 
 def get_request():
+    label.pack_forget()
     global response
     # Set the parameter for request
     url = 'https://api.nasa.gov/planetary/apod'
@@ -45,8 +47,9 @@ def get_request():
 # Update the labels
 def set_info():
     # Update the Label based on JSON returned objects
-    pic_date.config(text=response['date'])
-    pic_explanation.config(text=response['explanation'])
+    pic_date.config(text=response['date'], bg="white", font=font)
+    pic_explanation.config(
+        text=response['explanation'], bg="white", wraplength=500, font=font)
     global img
     global thumbnail
     global full_img
@@ -86,6 +89,13 @@ def full_size_image():
     img_label.pack()
 
 
+def save_image():
+    # Create a filedialog
+    file = filedialog.asksaveasfilename(
+        initialdir='./', title="Save Image as", filetypes=(("JPEG", "*.jpg"), ("All Files", "*.*")))
+    img.save(file + ".jpg")
+
+
 def exit_app():
     win.destroy()
 
@@ -96,7 +106,7 @@ frame_output = Frame(win, bg="#ffffff")
 frame_input.pack()
 frame_output.pack(padx=50, pady=(0, 25))
 
-calander = DateEntry(frame_input, width=10, font=font,
+calander = DateEntry(frame_input, width=15, font=font,
                      background=nasa_blue, foreground="#FFFFFF")
 
 submit = Button(frame_input, text="Submit", font=font,
@@ -104,22 +114,27 @@ submit = Button(frame_input, text="Submit", font=font,
 full_btn = Button(frame_input, text="View Photo",
                   font=font, bg=nasa_light_blue, command=full_size_image)
 save_btn = Button(frame_input, text="Save Photo",
-                  font=font, bg=nasa_light_blue)
+                  font=font, bg=nasa_light_blue, command=save_image)
 quit_btn = Button(frame_input, text="Quit", font=font,
                   bg="red", command=exit_app)
 calander.grid(row=0, column=0, padx=5, pady=10)
-submit.grid(row=0, column=1, padx=5, pady=10, ipadx=10)
-full_btn.grid(row=0, column=2, padx=5, pady=10, ipadx=10)
-save_btn.grid(row=0, column=3, padx=5, pady=10, ipadx=10)
-quit_btn.grid(row=0, column=4, padx=5, pady=10, ipadx=10)
+submit.grid(row=0, column=1, padx=5, pady=10, ipadx=35)
+full_btn.grid(row=0, column=2, padx=5, pady=10, ipadx=35)
+save_btn.grid(row=0, column=3, padx=5, pady=10, ipadx=35)
+quit_btn.grid(row=0, column=4, padx=5, pady=10, ipadx=35)
+
 
 # Layout for the output widget
-pic_date = Label(frame_output, text="texting", font=font, bg="white")
-pic_explanation = Label(frame_output, text="texting",
-                        font=font, bg="white", wraplength=500)
-pic_label = Label(frame_output, text="testing")
 
-pic_date.grid(row=0, column=1, padx=10)
+label = Label(frame_output, text="Select a Date from the Calander",
+              font=('Times New Roman', 19, 'bold'), fg="black")
+label.grid()
+pic_date = Label(frame_output, text="")
+pic_explanation = Label(frame_output, text="")
+pic_label = Label(frame_output, text="")
+
+pic_date.grid(row=0, column=0, padx=10)
 pic_explanation.grid(row=0, column=0, rowspan=1, padx=10, pady=10)
 pic_label.grid(row=0, column=1, padx=10, pady=10)
+
 win.mainloop()
